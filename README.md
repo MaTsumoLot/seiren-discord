@@ -1,4 +1,4 @@
-# Seiren Discord
+# Razer Seiren V3 Chroma Discord Mute Sync
 
 Sync the hardware mute button on the Razer Seiren V3 Chroma with Discord's microphone mute on Windows. The bridge reads the microphone's mute state through Core Audio and checks Discord's mute switch through Windows UI Automation. It does not record audio or send commands to Microsoft Teams.
 
