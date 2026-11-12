@@ -117,28 +117,28 @@ static class SeirenDiscord {
    var mic = window == null ? null : FindSwitch(window, "Mute");
    var deafen = window == null ? null : FindSwitch(window, "Deafen");
    if (mic == null || deafen == null) {
-    Log("Commandes Discord indisponibles");
+    Log("Discord controls unavailable");
     return;
    }
    var state = mic.Current.ToggleState;
    var target = muted ? ToggleState.On : ToggleState.Off;
    if (state == target) {
-    Log("Discord deja synchronise (" + target + ")");
+    Log("Discord already in sync (" + target + ")");
     return;
    }
    if (state == ToggleState.Indeterminate || deafen.Current.ToggleState != ToggleState.Off) {
-    Log("Discord assourdi ou etat incertain, action ignoree");
+    Log("Discord is deafened or its mute state is uncertain. Skipping change.");
     return;
    }
    mic.Toggle();
    for (int i = 0; i < 8; i++) {
     Thread.Sleep(100);
     if (mic.Current.ToggleState == target) {
-     Log("Discord verifie (" + target + ")");
+     Log("Discord mute state verified (" + target + ")");
      return;
     }
    }
-   Log("Discord: changement non confirme");
+   Log("Discord: mute state change could not be verified");
   } catch (Exception e) {
    Log("Discord: " + e.GetType().Name + " " + e.Message);
   }
@@ -149,7 +149,7 @@ static class SeirenDiscord {
    try {
     if (!mutex.WaitOne(0)) return;
    } catch (AbandonedMutexException) {}
-   Log("Demarrage");
+   Log("Bridge started");
    IEndpoint endpoint = null;
    bool? previous = null;
    while (true) {
@@ -159,14 +159,14 @@ static class SeirenDiscord {
      bool muted;
      endpoint.GetMute(out muted);
      if (previous != muted) {
-      Log("Seiren mute=" + muted);
+      Log("Seiren muted=" + muted);
       if (previous.HasValue || muted) Sync(muted);
       previous = muted;
      }
      Thread.Sleep(125);
     } catch (COMException e) {
      if (endpoint != null) Marshal.ReleaseComObject(endpoint);
-     if (endpoint != null || previous.HasValue) Log("Core Audio indisponible: " + e.ErrorCode);
+     if (endpoint != null || previous.HasValue) Log("Core Audio unavailable: " + e.ErrorCode);
      endpoint = null;
      previous = null;
      Thread.Sleep(1000);
@@ -175,4 +175,3 @@ static class SeirenDiscord {
   }
  }
 }
-

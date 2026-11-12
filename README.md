@@ -1,19 +1,19 @@
 # Seiren Discord
 
-Synchronise le bouton micro du Razer Seiren V3 Chroma avec le mute de Discord sur Windows. Le pont lit l'état de coupure via Core Audio et vérifie le bouton de Discord via Windows UI Automation. Il ne capture pas de son et ne commande pas Teams.
+Sync the hardware mute button on the Razer Seiren V3 Chroma with Discord's microphone mute on Windows. The bridge reads the microphone's mute state through Core Audio and checks Discord's mute switch through Windows UI Automation. It does not record audio or send commands to Microsoft Teams.
 
-## Utilisation
+## Getting started
 
-1. Sur Windows 64 bits, définissez le Seiren V3 Chroma comme périphérique d'entrée par défaut dans Windows. Sélectionnez cette entrée dans l'application Discord de bureau (version stable, interface en anglais).
-2. Lancez **SeirenDiscord.exe**. Il tourne en arrière-plan.
-3. Appuyez sur le bouton physique du micro et vérifiez l'icône Discord. Pour arrêter le pont, terminez **SeirenDiscord** dans le Gestionnaire des tâches.
+1. On 64-bit Windows, set the Seiren V3 Chroma as your default input device. Select that microphone in the stable Discord desktop app and set the app language to English.
+2. Run **SeirenDiscord.exe**. It runs in the background.
+3. Press the hardware mute button and check that Discord's microphone icon follows it. To stop the bridge, end **SeirenDiscord** in Task Manager.
 
-Pour lancer le pont à l'ouverture de session, ajoutez un raccourci vers l'exécutable dans le dossier Démarrage de Windows. Le journal local se trouve dans %LOCALAPPDATA%\SeirenDiscord\SeirenDiscord.log.
+To launch the bridge when you sign in, add a shortcut to the executable in the Windows Startup folder. The local log is at %LOCALAPPDATA%\SeirenDiscord\SeirenDiscord.log.
 
-## Compilation
+## Building from source
 
-Exécutez **build.ps1** dans PowerShell sur Windows 64 bits. Le script utilise le compilateur .NET Framework de Windows et produit **SeirenDiscord.exe** à côté du code source.
+Run **build.ps1** in PowerShell on 64-bit Windows. It uses the Windows .NET Framework compiler and places **SeirenDiscord.exe** alongside the source.
 
-## Limites
+## Limitations
 
-Le pont suit uniquement les changements du micro physique. Une pression peut être ignorée si Discord est fermé, assourdi (Deafen) ou si ses commandes sont inaccessibles. Au démarrage, le pont ne réactive pas le micro Discord. Si vous changez de périphérique d'entrée, relancez le pont après avoir sélectionné le Seiren. Une mise à jour de Discord peut modifier les noms ou le comportement de ses commandes.
+Sync is one-way, from the microphone to Discord. A button press may be skipped if Discord is closed, deafened, or its microphone controls are unavailable. The bridge never unmutes Discord at startup. If you change your input device, select the Seiren again and restart the bridge. Discord updates may change how its microphone controls are exposed.
