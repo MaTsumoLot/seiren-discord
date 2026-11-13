@@ -152,21 +152,25 @@ static class SeirenDiscord {
    Log("Bridge started");
    IEndpoint endpoint = null;
    bool? previous = null;
+   bool audioUnavailable = false;
    while (true) {
     try {
      if (endpoint == null) endpoint = OpenEndpoint();
      if (endpoint == null) { Thread.Sleep(1000); continue; }
      bool muted;
      endpoint.GetMute(out muted);
+     audioUnavailable = false;
      if (previous != muted) {
       Log("Seiren muted=" + muted);
       if (previous.HasValue || muted) Sync(muted);
       previous = muted;
      }
      Thread.Sleep(125);
-    } catch (COMException e) {
+    } catch (Exception e) {
+     if (!(e is COMException) && !(e is IOException)) throw;
      if (endpoint != null) Marshal.ReleaseComObject(endpoint);
-     if (endpoint != null || previous.HasValue) Log("Core Audio unavailable: " + e.ErrorCode);
+     if (!audioUnavailable) Log("Core Audio unavailable: " + e.GetType().Name + " " + e.Message);
+     audioUnavailable = true;
      endpoint = null;
      previous = null;
      Thread.Sleep(1000);
